@@ -1,26 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { useQuery } from 'react-query';
+import useFetch from './useFetch';
 
 export default function Joke() {
+  const {
+    data: joke,
+    isLoading,
+    errorMessage,
+  } = useFetch('https://api.chucknorris.io/jokes/random');
 
-  const [joke, setJoke] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [ errorMessage, setErrorMessage ] = useState(null);
-
-  useEffect( () => {
-    fetch('https://api.chucknorris.io/jokes/random')
-    .then(response => response.json())
-    .then(result => {
-      // console.log(results);
-      setIsLoading(false)
-      setJoke(result.value);
-    })
-    .catch(error => {
-      setIsLoading(false)
-      setErrorMessage('There was an error.');
-     })
-  }, [])
-  
 
   // const {
   //   data: joke,
@@ -51,7 +39,7 @@ export default function Joke() {
 
       {isLoading && <div>Loading...</div>}
       { joke && 
-     <div>{joke}</div>
+     <div>{joke.value}</div>
       }
       {errorMessage && <div>{errorMessage}</div>}
 
