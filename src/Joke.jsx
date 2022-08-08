@@ -1,31 +1,31 @@
 import React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import useFetch from './useFetch';
 
 export default function Joke() {
-  const {
-    data: joke,
-    isLoading,
-    errorMessage,
-  } = useFetch('https://api.chucknorris.io/jokes/random');
-
-
   // const {
   //   data: joke,
   //   isLoading,
-  //   isError,
-  //   error,
-  //   isSuccess,
-  // } = useQuery('joke', fetchJoke, {
-  //   // staleTime: 6000,
-  //   refetchOnWindowFocus: false,
-  // });
+  //   errorMessage,
+  // } = useFetch('https://api.chucknorris.io/jokes/random');
 
-  // function fetchJoke() {
-  //   return fetch('https://official-joke-api.appspot.com/jokes/random').then(
-  //     response => response.json()
-  //   );
-  // }
+
+  const {
+    data: joke,
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+  } = useQuery(['joke'], fetchJoke, {
+    staleTime: 6000,
+    refetchOnWindowFocus: false,
+  });
+
+  function fetchJoke() {
+    return fetch('https://api.chucknorris.io/jokes/random').then(
+      response => response.json()
+    );
+  }
 
   // const {
   //   data: joke,
@@ -38,10 +38,10 @@ export default function Joke() {
       <h2>Joke API</h2>
 
       {isLoading && <div>Loading...</div>}
-      { joke && 
+      { isSuccess && 
      <div>{joke.value}</div>
       }
-      {errorMessage && <div>{errorMessage}</div>}
+      {isError && <div>{error.message}</div>}
 
       {/* {isLoading && <div>Loading...</div>}
       {isSuccess && <div>{joke.setup + ' ' + joke.punchline}</div>}
